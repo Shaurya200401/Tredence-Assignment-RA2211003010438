@@ -50,12 +50,12 @@ The API will be available at `http://127.0.0.1:8000/docs/`.
 {
   "name": "my_graph",
   "nodes": {
-    "extract": {},
-    "analyze": {}
+    "extract_functions": {},
+    "check_complexity": {}
   },
   "edges": {
-    "extract": "analyze",
-    "analyze": "end"
+    "extract_functions": "check_complexity",
+    "check_complexity": "end"
   }
 }
 ```
