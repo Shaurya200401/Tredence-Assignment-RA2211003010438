@@ -3,9 +3,9 @@ from app.tools import TOOLS
 import asyncio
 
 
-# -------------------------
+
 # Extract functions from code
-# -------------------------
+
 async def extract_functions(state: Dict[str, Any]) -> Dict[str, Any]:
     code = state.get("code", "")
     parts = code.split("def ")
@@ -21,9 +21,9 @@ async def extract_functions(state: Dict[str, Any]) -> Dict[str, Any]:
     return {}
 
 
-# -------------------------
+
 # Check complexity of extracted functions
-# -------------------------
+
 async def check_complexity(state: Dict[str, Any]) -> Dict[str, Any]:
     funcs = state.get("functions", [])
     scores = []
@@ -60,9 +60,9 @@ async def detect_issues(state: Dict[str, Any]) -> Dict[str, Any]:
     return {}
 
 
-# -------------------------
+
 # Suggest improvements until quality threshold reached
-# -------------------------
+
 async def suggest_improvements(state: Dict[str, Any]) -> Dict[str, Any]:
     issues = state.get("issues", 0)
     suggestions = []
