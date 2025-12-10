@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Workflow Engine Logs</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #f0f0f0; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input, button { padding: 8px; font-size: 16px; margin-right: 10px; }
+        #logs { 
+            background: #2d2d2d; 
+            color: #ccc; 
+            padding: 15px; 
+            height: 400px; 
+            overflow-y: auto; 
+            margin-top: 20px; 
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        .log-entry { margin-bottom: 5px; border-bottom: 1px solid #333; padding-bottom: 2px; }
+        .status { margin-top: 10px; color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Workflow Live Logs</h2>
+        <div>
+            <label>Run ID: </label>
+            <input type="text" id="runId" placeholder="Enter Run ID" style="width: 300px;">
+            <button onclick="connect()">Connect</button>
+        </div>
+        <div class="status" id="status">Status: Disconnected</div>
+        <div id="logs"></div>
+    </div>
+
+    <script>
+        let ws = null;
+        const logsDiv = document.getElementById('logs');
+        const statusDiv = document.getElementById('status');
+
+        function connect() {
+            const runId = document.getElementById('runId').value.trim();
+            if (!runId) {
+                alert("Please enter a Run ID");
+                return;
+            }
+
+            if (ws) {
+                ws.close();
+            }
+
+            const url = `ws://127.0.0.1:8000/ws/logs/${runId}`;
+            statusDiv.textContent = `Status: Connecting to ${url}...`;
+            
+            ws = new WebSocket(url);
+
+            ws.onopen = function() {
+                statusDiv.textContent = "Status: Connected";
+                logsDiv.innerHTML += `<div style="color: green">--- Connected to ${runId} ---</div>`;
+            };
+
+            ws.onmessage = function(event) {
+                const div = document.createElement('div');
+                div.className = 'log-entry';
+                div.textContent = event.data;
+                logsDiv.appendChild(div);
+                logsDiv.scrollTop = logsDiv.scrollHeight;
+            };
+
+            ws.onclose = function(event) {
+                statusDiv.textContent = `Status: Disconnected (Code: ${event.code})`;
+                logsDiv.innerHTML += `<div style="color: orange">--- Disconnected ---</div>`;
+            };
+
+            ws.onerror = function(error) {
+                console.error("WebSocket Error:", error);
+                statusDiv.textContent = "Status: Error";
+            };
+        }
+    </script>
+</body>
+</html>
