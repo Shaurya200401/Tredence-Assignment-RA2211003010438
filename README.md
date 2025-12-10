@@ -19,9 +19,22 @@ A lightweight, async python workflow engine built with FastAPI. It supports defi
 - `fastapi`, `uvicorn`, `requests` (optional for verify script)
 
 ### Installation
-```bash
-pip install fastapi uvicorn
-```
+
+1. **Create and activate a virtual environment**:
+   ```bash
+   # Windows
+   python -m venv venv
+   .\venv\Scripts\activate
+
+   # Linux/Mac
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   pip install fastapi "uvicorn[standard]" websockets
+   ```
 
 ### Running the Server
 ```bash
